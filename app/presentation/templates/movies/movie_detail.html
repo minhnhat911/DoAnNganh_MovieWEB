@@ -1,0 +1,180 @@
+{% extends 'layout/base.html' %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style_movie.css') }}">
+{% endblock %}
+
+{% block content %}
+<section id="videoSection" class="container video" style="display: none;">
+  <div class="ratio ratio-16x9 rounded-3 overflow-hidden">
+    <video
+      id="myVideo"
+      controls
+      preload="metadata"
+      data-episode-id="{{ (movie.episodes|last).id if movie.episodes else '' }}"
+      data-video-src="{{ (movie.episodes|last).video_url if movie.episodes else '' }}"
+      data-resume-position="0">
+    </video>
+  </div>
+
+  <div class="d-flex justify-content-end mt-3">
+    <span class="badge bg-dark p-2">
+      <a href="#" target="_blank" class="text-white text-decoration-none">ViewLife+</a>
+    </span>
+  </div>
+</section>
+
+
+<section class="details-section container mt-3">
+    <div class="row">
+        <!-- Poster và thông tin bên trái -->
+        <div class="col-md-4">
+            <div class="movie-poster">
+                <img src="{{ movie.poster_url or url_for('static', filename='images/test.png') }}" class="img-fluid rounded" alt="Poster {{ movie.title }}">
+            </div>
+        </div>
+
+        <!-- Chi tiết phim bên phải -->
+        <div class="col-md-8">
+            <div class="movie-details">
+                <h1 class="movie-title">{{ movie.title }}</h1>
+                <div class="movie-info-item">
+                    <span class="info-label">Mô tả</span>
+                    <span class="info-value">{{ movie.description }}</span>
+                </div>
+                <div class="movie-info-item">
+                    <span class="info-label">Thể loại</span>
+                    <div class="genre-tags">
+                        {% for g in movie.genres %}
+                            <a href="{{ url_for('index.by_genre', genre_id=g.id) }}" class="badge bg-secondary">{{ g.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="movie-info-item">
+                    <span class="info-label">Diễn viên</span>
+                    <div class="actor-tags">
+                        {% for a in movie.actors %}
+                            <a href="{{ url_for('index.by_actor', actor_id=a.id) }}" class="badge bg-secondary">{{ a.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="movie-info-item">
+                    <span class="info-label">Năm xuất bản</span>
+                    <span class="info-value">🗓️ {{ movie.release_year }}</span>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="d-flex align-items-center mb-3">
+                    <div class="movie-rating me-3">
+                        <span class="rating-value">{{ movie.rating | default("0.00") }}</span><small class="text-white">/5 ({{ movie.rating_count | default("21") }} lượt)</small>
+                    </div>
+                    <button class="btn btn-primary">Đánh Giá</button>
+                </div>
+
+                <div class="button-group mt-4">
+                    <button id="btnPlay" type="button" class="btn btn-warning me-2"
+                              data-src="{{ movie.trailer_url or 'https://www.w3schools.com/html/mov_bbb.mp4' }}">
+                        <i class="fas fa-play"></i> Xem Trailer
+                      </button>
+                    <button class="btn btn-outline-primary">
+                        <i class="fas fa-bookmark"></i> Theo Dõi
+                    </button>
+                </div>
+
+                <div class="quick-search mt-4">
+                    <button class="btn btn-secondary mt-2">
+                        DANH SÁCH TẬP
+                    </button>
+                </div>
+
+                <div class="episode-list mt-4">
+                    <div class="d-flex flex-wrap-reverse">
+                        {% for episode in movie.episodes | reverse %}
+                    <button type="button" class="btn btn-dark me-2 mb-2 episode-button"
+                              data-src="{{ episode.video_url or 'https://www.w3schools.com/html/mov_bbb.mp4' }}"
+                                data-episode-id="{{ episode.id }}"
+                                data-episode-number="{{ episode.episode_number }}">
+                         Tập {{ episode.episode_number }}
+                    </button>
+                        {% endfor %}
+                    </div>
+
+<!--                    <div class="d-flex flex-wrap-reverse">-->
+<!--                    {% for episode in movie.episodes | reverse %}-->
+<!--                       <button-->
+<!--                           type="button"-->
+<!--                           class="btn btn-dark me-2 mb-2 episode-button"-->
+<!--                           data-src="{{ episode.video_url }}"-->
+<!--                           data-episode-number="{{ episode.episode_number }}"-->
+<!--                       >-->
+<!--                           Tập {{ episode.episode_number }}-->
+<!--                       </button>-->
+<!--                    {% endfor %}-->
+<!--                </div>-->
+
+<!--                    <video id="videoPlayer" controls width="100%" height="auto">-->
+<!--                        <source src="" type="video/mp4">-->
+<!--                        Trình duyệt của bạn không hỗ trợ thẻ video.-->
+<!--                    </video>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container comment-card mt-5">
+        <h3 class="comment-title">Bình luận</h3>
+
+        {% if current_user.is_authenticated %}
+        <form class="comment-form" method="POST"
+              action="{{ url_for('index.movie_detail', movie_id=movie.id) }}">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.content.label }}
+                {{ form.content(class="form-control bg-secondary text-white", placeholder="Viết cảm nhận của bạn...") }}
+            </div>
+
+            <div class="form-actions mt-3">
+                {{ form.submit(class="btn btn-gradient px-4") }}
+            </div>
+        </form>
+        {% else %}
+        <div class="alert alert-info" role="alert">
+            Bạn cần <a href="{{ url_for('user.auth_user') }}">đăng nhập</a> để bình luận.
+        </div>
+        {% endif %}
+
+        <div class="comment-list mt-4">
+            {% if movie.comments %}
+            {% for comment in movie.comments | sort(attribute='created_at', reverse=True) %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ comment.account.username }}</h5>
+                    <h6 class="card-subtitle mb-2 text-secondary">{{ comment.created_at.strftime('%d/%m/%Y %H:%M') }}</h6>
+                    <p class="card-text">{{ comment.review }}</p>
+
+                    {% if current_user.is_authenticated and current_user.id == comment.account_id %}
+                        <button class="btn btn-edit" onclick="showEditForm({{ comment.id }})">Sửa</button>
+                        <form action="{{ url_for('index.delete_comment_route', comment_id=comment.id) }}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-delete" onclick="return confirm('Bạn có chắc muốn xóa bình luận này?')">Xóa</button>
+                        </form>
+                    {% endif %}
+
+                    <div id="edit-form-{{ comment.id }}" style="display: none; margin-top: 10px;">
+                        <form action="{{ url_for('index.edit_comment_route', comment_id=comment.id) }}" method="post">
+                            <textarea name="new_review" class="form-control mb-2">{{ comment.review }}</textarea>
+                            <button type="submit" class="btn btn-sm btn-success">Lưu</button>
+                            <button type="button" class="btn btn-sm btn-secondary" onclick="hideEditForm({{ comment.id }})">Hủy</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="text-white">Chưa có bình luận nào.</p>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

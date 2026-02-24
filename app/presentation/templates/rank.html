@@ -1,0 +1,52 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+<div class="container ranking-header">
+    <h3>TOP 10 LƯỢT XEM</h3>
+    <div class="tabs">
+      <button class="active">NGÀY</button>
+      <button>TUẦN</button>
+      <button>THÁNG</button>
+      <button>TẤT CẢ</button>
+    </div>
+  </div>
+<section class="container rank">
+  <div class="box">
+    <span style="--i:1" data-rank="1" data-title=""><img src="https://res.cloudinary.com/dxavze1c0/image/upload/v1758616548/dff12a3d-c6f2-4558-aee2-fd28555d038a.png" alt="anh 1"></span>
+    <span style="--i:2" data-rank="2" data-title=""><img src="https://res.cloudinary.com/dxavze1c0/image/upload/v1758616553/36a3a18b-5253-4356-8b99-7cf54147f829.png" alt="anh 2"></span>
+    <span style="--i:3" data-rank="3" data-title=""><img src="https://res.cloudinary.com/dxavze1c0/image/upload/v1758616542/df09c229-8fba-407d-9d1f-d7e07995f015.png" alt="anh 3"></span>
+    <span style="--i:4" data-rank="4" data-title=""><img src="https://res.cloudinary.com/dxavze1c0/image/upload/v1758616536/eb5b2039-78be-4246-96ef-e35ffd904640.png" alt=""></span>
+    <span style="--i:5" data-rank="5" data-title=""><img src="https://res.cloudinary.com/dxavze1c0/image/upload/v1758616526/8ff4cf09-00e1-4c5f-8495-eec674f9dc71.png" alt=""></span>
+    <span style="--i:6" data-rank="6" data-title=""><img src="https://res.cloudinary.com/dxavze1c0/image/upload/v1758616518/52817e21-9c67-4671-a577-190f3e486dee.png" alt=""></span>
+    <span style="--i:7" data-rank="7" data-title=""><img src="https://res.cloudinary.com/dxavze1c0/image/upload/v1758616507/e134c9dc-f9e6-41dc-8ad5-468f6e4b4c33.png" alt=""></span>
+    <span style="--i:8" data-rank="8" data-title=""><img src="https://res.cloudinary.com/dxavze1c0/image/upload/v1758616507/e134c9dc-f9e6-41dc-8ad5-468f6e4b4c33.png" alt=""></span>
+    <span style="--i:9" data-rank="9" data-title=""><img src="https://res.cloudinary.com/dxavze1c0/image/upload/v1758588439/f1f497f8-d45a-4b0f-a2e8-d980928bd541.png" alt=""></span>
+    <span style="--i:10" data-rank="10" data-title=""><img src="https://res.cloudinary.com/dxavze1c0/image/upload/v1758588545/42e70e36-e610-4e75-8fc3-5a02780165e2.png" alt=""></span>
+  </div>
+
+  <script>
+    document.querySelectorAll('.box span img').forEach(img => {
+      img.addEventListener('click', function () {
+        this.classList.toggle('active');
+      });
+    });
+
+    const tabs = document.querySelectorAll(".tabs button");
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        // bỏ active cũ
+        tabs.forEach(btn => btn.classList.remove("active"));
+        // gán active cho nút đang click
+        tab.classList.add("active");
+      });
+    });
+  </script>
+</section>
+
+{% endblock %}
+
+
+
+
+

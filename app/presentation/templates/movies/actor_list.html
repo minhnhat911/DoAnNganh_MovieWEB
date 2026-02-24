@@ -1,0 +1,85 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+<section class="container py-4">
+  <!-- SECTION: Thông tin tác giả -->
+  <div class="row align-items-center g-4">
+    <div class="col-md-3 text-center">
+      <img
+        src="{{ actor.avatar_url or url_for('static', filename='images/test.png') }}"
+        alt="{{ actor.name }}"
+        class="img-fluid rounded-circle shadow"
+        style="max-width: 180px; aspect-ratio: 1/1; object-fit: cover;"
+      >
+    </div>
+    <div class="col-md-9">
+      <h1 class="text-white mb-2">{{ actor.name }}</h1>
+
+      <div class="text-white mb-2">
+        <strong>Ngày sinh:</strong>
+        {% if actor.date_of_birth %}
+          {{ actor.date_of_birth.strftime('%d/%m/%Y') }}
+        {% else %}
+          —
+        {% endif %}
+      </div>
+
+      <div class="text-white-50">
+        {% if actor.description %}
+          {{ actor.description }}
+        {% else %}
+          <em>Chưa có mô tả.</em>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+<section class="container latest-section">
+    <h2 class="movies-heading">Tác giả: {{ actor.name }}</h2>
+    {% if movies %}
+      <div class="movies-grid">
+        {% for m in movies %}
+          <div class="movie-card" onclick="window.location.href='{{ url_for('index.movie_detail', movie_id=m.id) }}'">
+            <img src="{{ m.poster_url or url_for('static', filename='images/test.png') }}" alt="{{ m.title }}">
+            <h4>{{ m.title }}</h4>
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if pagination.pages > 1 %}
+      <nav class="pagination">
+        {# First + Prev #}
+        {% if pagination.has_prev %}
+          <a href="{{ url_for('index.by_actor', actor_id=actor.id, page=1, per_page=pagination.per_page) }}">&laquo; First</a>
+          <a href="{{ url_for('index.by_actor', actor_id=actor.id, page=pagination.prev_num, per_page=pagination.per_page) }}">Prev</a>
+        {% else %}
+          <span class="disabled">&laquo; First</span>
+          <span class="disabled">Prev</span>
+        {% endif %}
+
+        {# Page numbers #}
+        {% for p in range(1, pagination.pages + 1) %}
+          {% if p == pagination.page %}
+            <span class="current">{{ p }}</span>
+          {% else %}
+            <a href="{{ url_for('index.by_actor', actor_id=actor.id, page=p, per_page=pagination.per_page) }}">{{ p }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {# Next + Last #}
+        {% if pagination.has_next %}
+          <a href="{{ url_for('index.by_actor', actor_id=actor.id, page=pagination.next_num, per_page=pagination.per_page) }}">Next</a>
+          <a href="{{ url_for('index.by_actor', actor_id=actor.id, page=pagination.pages, per_page=pagination.per_page) }}">Last &raquo;</a>
+        {% else %}
+          <span class="disabled">Next</span>
+          <span class="disabled">Last &raquo;</span>
+        {% endif %}
+      </nav>
+      {% endif %}
+
+    {% else %}
+      <p class="no-data text-white">Không có phim nào trong hệ thống!</p>
+    {% endif %}
+
+</section>
+{% endblock %}

@@ -1,0 +1,15 @@
+from app import create_app
+from app.data.db_connection import db
+
+# Import tất cả model để SQLAlchemy biết và tạo bảng
+from app.data.models import *
+
+
+app = create_app()
+
+if __name__ == "__main__":
+    with app.app_context():
+        #db.drop_all()
+        db.create_all()
+
+    app.run(debug=True)

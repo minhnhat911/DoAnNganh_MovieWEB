@@ -1,0 +1,142 @@
+/* Custom CSS for movie details section */
+body {
+    background-color: #0c0c0c;
+    color: #fff;
+}
+
+.details-section {
+    background-color: #1a1a1a;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.movie-poster {
+    text-align: center;
+
+}
+
+.movie-details {
+    margin-left: 50px;
+}
+.movie-poster img {
+    border-radius: 8px;
+    max-width: 100%;
+}
+
+.movie-title {
+    color: #ffc107; /* Màu vàng nổi bật */
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.movie-info-item {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 10px;
+}
+
+.info-label {
+    font-weight: 500;
+    color: #ccc;
+    width: 120px; /* Căn chỉnh các nhãn */
+    flex-shrink: 0;
+}
+
+.info-value {
+    color: #fff;
+    font-weight: 400;
+}
+
+.genre-tags .badge {
+    background-color: #333 !important;
+    border-radius: 12px;
+    padding: 5px 10px;
+    margin-right: 5px;
+    font-size: 0.9em;
+}
+
+.movie-rating .rating-value {
+    color: #ffc107;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.button-group .btn {
+    font-size: 1.1em;
+    padding: 10px 20px;
+}
+.fa-play {
+    background: transparent !important;
+}
+
+.episode-item {
+    cursor: pointer;
+    background-color: #333 !important;
+    padding: 8px 30px !important;
+}
+
+.episode-item:hover {
+    background-color: #555 !important;
+}
+
+
+/* Card tổng thể */
+.comment-card {
+  color: white;
+  background: #121212;
+  border: 1px solid #2a2a2a;
+  border-radius: 14px;
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+.comment-title {
+  font-size: 20px;
+  margin-bottom: 16px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #ffd36e, #ff7ca3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Form */
+.btn-gradient {
+  background: linear-gradient(45deg, #ff416c, #ffdb3a);
+  }
+.btn-gradient:hover {
+  background: linear-gradient(45deg, #ff5e7e, #ffe066);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  color: black !important;
+}
+.btn-edit {
+  background: linear-gradient(45deg, Blue, #66FFFF);
+  height: 25px;
+  font-size: 12px !important;
+  line-height: 10px !important;
+}
+.btn-delete{
+  background: linear-gradient(45deg, #444444, #EE0000);
+  height: 25px;
+  font-size: 12px !important;
+  line-height: 10px !important;
+}
+
+.card-body {
+    color: #CCCCCC !important;
+}
+
+}
+.form-control {
+    background: #333333 !important;
+}
+
+.video-container {
+   max-width: 900px;
+   margin: 50px auto;
+}
+

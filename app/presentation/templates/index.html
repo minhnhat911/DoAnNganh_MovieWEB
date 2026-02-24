@@ -1,0 +1,100 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+  <!-- Phần "Đang thịnh hành" -->
+<section class="container trending-section">
+    <h2>ĐANG THỊNH HÀNH</h2>
+        <button id="left-btn" class="nav-button"><</button>
+        <div class="carousel-container">
+            <!-- Movie Card 1 -->
+            {% for m in movies[:10] %}
+            <div class="movie-card">
+                <img src="{{ m.poster_url or url_for('static', filename='images/test.png') }}" alt="m.title">
+                <div class="rating"> {{ m.rating }}</div>
+                <div class="movie-info">
+                    <h5>{{ m.title }}</h5>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <button id="right-btn" class="nav-button">></button>
+</section>
+
+  <!-- HERO SLIDER -->
+<section class="hero-wrap">
+    <div class="hero-slider" id="heroSlider">
+      <button class="nav prev" aria-label="Slide trước"></button>
+
+      <div class="viewport">
+        <ul class="track">
+          <!-- Slide 1 -->
+          <li class="slide">
+            <a href="#"><img src="https://res.cloudinary.com/dxavze1c0/image/upload/v1758589167/d01f3d63-ecec-4b25-8c29-d00fdb48bb57.png" alt="Banner 1"></a>
+          </li>
+          <!-- Slide 2 -->
+          <li class="slide">
+            <a href="#"><img src="https://images.unsplash.com/photo-1460353581641-37baddab0fa2?q=80&w=2000&auto=format&fit=crop" alt="Banner 2"></a>
+          </li>
+          <!-- Slide 3 -->
+          <li class="slide">
+            <a href="#"><img src="https://images.unsplash.com/photo-1511765224389-37f0e77cf0eb?q=80&w=2000&auto=format&fit=crop" alt="Banner 3"></a>
+          </li>
+        </ul>
+      </div>
+
+      <button class="nav next" aria-label="Slide sau"></button>
+
+      <!-- Dots sẽ được JS tự sinh -->
+      <div class="dots" aria-label="Pagination"></div>
+    </div>
+  </section>
+
+<!-- Phần "Mới Cập Nhật" -->
+<section class="container latest-section">
+    <h2 class="movies-heading">Mới cập nhật</h2>
+    {% if movies %}
+      <div class="movies-grid">
+        {% for m in movies %}
+          <div class="movie-card" onclick="window.location.href='{{ url_for('index.movie_detail', movie_id=m.id) }}'">
+            <img src="{{ m.poster_url or url_for('static', filename='images/test.png')}}" alt="{{ m.title }}">
+            <h4>{{ m.title }}</h4>
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if pagination.pages > 1 %}
+      <nav class="pagination">
+        {# First + Prev #}
+        {% if pagination.has_prev %}
+          <a href="{{ url_for('index.index', page=1, per_page=pagination.per_page) }}">&laquo; First</a>
+          <a href="{{ url_for('index.index', page=pagination.prev_num, per_page=pagination.per_page) }}">Prev</a>
+        {% else %}
+          <span class="disabled">&laquo; First</span>
+          <span class="disabled">Prev</span>
+        {% endif %}
+
+        {# Page numbers #}
+        {% for p in range(1, pagination.pages + 1) %}
+          {% if p == pagination.page %}
+            <span class="current">{{ p }}</span>
+          {% else %}
+            <a href="{{ url_for('index.index', page=p, per_page=pagination.per_page) }}">{{ p }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {# Next + Last #}
+        {% if pagination.has_next %}
+          <a href="{{ url_for('index.index', page=pagination.next_num, per_page=pagination.per_page) }}">Next</a>
+          <a href="{{ url_for('index.index', page=pagination.pages, per_page=pagination.per_page) }}">Last &raquo;</a>
+        {% else %}
+          <span class="disabled">Next</span>
+          <span class="disabled">Last &raquo;</span>
+        {% endif %}
+      </nav>
+      {% endif %}
+    {% else %}
+      <p class="no-data">Không có phim nào trong hệ thống!</p>
+    {% endif %}
+
+</section>
+{% endblock %}

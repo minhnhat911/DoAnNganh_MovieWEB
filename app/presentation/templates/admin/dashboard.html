@@ -1,0 +1,110 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<div class="container-fluid py-3">
+
+  <h4 class="mb-3">Top 10 phim theo lượt xem</h4>
+
+  <!-- Bộ lọc -->
+  <form method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-12 col-sm-3">
+      <label class="form-label">Kỳ</label>
+      <select name="period" class="form-select">
+        <option value="month" {{ 'selected' if period=='month' else '' }}>Theo tháng</option>
+        <option value="year"  {{ 'selected' if period=='year'  else '' }}>Theo năm</option>
+        <option value="all"   {{ 'selected' if period=='all'   else '' }}>Toàn thời gian</option>
+      </select>
+    </div>
+    <div class="col-6 col-sm-2">
+      <label class="form-label">Tháng</label>
+      <input type="number" name="month" min="1" max="12" class="form-control"
+             value="{{ month or '' }}" placeholder="1..12">
+    </div>
+    <div class="col-6 col-sm-2">
+      <label class="form-label">Năm</label>
+      <input type="number" name="year" min="2000" max="2100" class="form-control"
+             value="{{ year or '' }}" placeholder="2025">
+    </div>
+    <div class="col-12 col-sm-3">
+      <button class="btn btn-primary w-100">Xem báo cáo</button>
+    </div>
+    <div class="col-12">
+      <small class="text-muted">
+        • Với <b>Tháng/Năm</b>: để trống sẽ dùng tháng/năm hiện tại (nếu chọn kỳ "Theo tháng").
+        Chọn "Theo năm" chỉ cần nhập Năm.
+      </small>
+    </div>
+  </form>
+
+  <!-- Biểu đồ -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <h6 class="card-title mb-2">
+        Biểu đồ Top 10 lượt xem
+        {% if period == 'month' %} (Tháng {{ month or 'hiện tại' }}/{{ year or 'hiện tại' }})
+        {% elif period == 'year' %} (Năm {{ year or 'hiện tại' }})
+        {% else %} (Toàn thời gian){% endif %}
+      </h6>
+      <canvas id="chartTop10" height="120"></canvas>
+    </div>
+  </div>
+
+  <!-- Bảng -->
+  <div class="card">
+    <div class="card-body table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th style="width:60px;">#</th>
+            <th>Phim</th>
+            <th class="text-end" style="width:180px;">Lượt xem</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if rows %}
+            {% for r in rows %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ r.title }}</td>
+              <td class="text-end">{{ "{:,}".format(r.total_views) }}</td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr><td colspan="3" class="text-center text-muted">Không có dữ liệu.</td></tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const labels = {{ labels | tojson }};
+  const values = {{ values | tojson }};
+
+  new Chart(document.getElementById('chartTop10'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Lượt xem',
+        data: values
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ' ' + ctx.parsed.x.toLocaleString() + ' lượt xem' } }
+      },
+      scales: {
+        x: { beginAtZero: true }
+      }
+    }
+  });
+</script>
+{% endblock %}

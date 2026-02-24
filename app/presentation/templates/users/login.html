@@ -1,0 +1,35 @@
+{% extends 'layout/base.html' %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style_log.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+  <div class="login-card">
+    <h2 class="login-title">Đăng nhập</h2>
+
+    {% if err_msg %}
+      <div class="alert alert-error">{{ err_msg }}</div>
+    {% endif %}
+
+    <form action="{{ url_for('user.auth_user') }}" method="POST" class="login-form">
+      <div class="field">
+        <label for="username" class="label">Tên tài khoản</label>
+        <input type="text" id="username" name="username" class="input" required>
+      </div>
+
+      <div class="field">
+        <label for="password" class="label">Mật khẩu</label>
+        <input type="password" id="password" name="password" class="input" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Đăng nhập</button>
+    </form>
+
+    <div class="helper">
+      <a href="{{ url_for('user.add_user') }}" class="link">Bạn chưa có tài khoản? Đăng ký ngay</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
