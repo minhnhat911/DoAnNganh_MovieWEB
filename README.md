@@ -1,5 +1,5 @@
-#DoAnNganh_MovieWEB
- ‑ ‑ ‑ 
+DoAnNganh_MovieWEB
+
 - Ngôn ngữ lập trình: backend: Python (Flask); frontend:  HTML, CSS, 
 JavaScript kết hợp Bootstrap; cơ sở dữ liệu: MySQL. 
 - Công nghệ lưu trữ và phát video: Cloudinary/AWS S3 để lưu trữ và phát 
